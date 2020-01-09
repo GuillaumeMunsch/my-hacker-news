@@ -1,0 +1,39 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true
+    },
+    "extends": [
+        "airbnb",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": [
+        "prettier"
+    ],
+    "rules": {
+        "camelcase": 0,
+        "no-console": 0,
+        "no-alert": 0,
+        "no-unused-expressions": 0,
+        "no-plusplus": 0,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/jsx-pascal-case": 0,
+        "react/no-unused-prop-types": 0,
+        "react/no-array-index-key": 0,
+        "react/no-will-update-set-state": 0,
+        "react/sort-prop-types": [
+            1,
+            {
+                "requiredFirst": true
+            }
+        ]
+    }
+}
