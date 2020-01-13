@@ -30,6 +30,8 @@ NewsStack.navigationOptions = {
   ),
 };
 
+NewsStack.path = ''
+
 const LinksStack = createStackNavigator(
   {
     Links: LinksScreen,
@@ -44,6 +46,8 @@ LinksStack.navigationOptions = {
   ),
 };
 
+LinksStack.path = ''
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -57,6 +61,8 @@ SettingsStack.navigationOptions = {
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
 };
+
+SettingsStack.path = ''
 
 const tabNavigator = createBottomTabNavigator({
   NewsStack,

@@ -1,10 +1,9 @@
 import { all, fork } from 'redux-saga/effects';
-import { sagaHelper } from './sagaHelper';
-import watchFetchNews from './watchFetchNews';
+import sagaHelper from './sagaHelper';
 
 function* rootSaga() {
     yield all([
-        fork(watchFetchNews),
+        fork(sagaHelper('news', {}, true)),
     ]);
 }
 
