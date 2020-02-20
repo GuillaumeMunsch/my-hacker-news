@@ -1,3 +1,4 @@
+import asyncReducerHelper from './asyncReducerHelper'
 import fetchHelper from './fetchHelper'
 
-export { fetchHelper }
+export { asyncReducerHelper, fetchHelper }

@@ -1,8 +1,8 @@
 import { actionChannel, call, take, put, select } from 'redux-saga/effects';
-import { fetchHelper } from 'MyHackerNews/src/utils';
-import getRoute from 'MyHackerNews/src/routes';
+import { fetchHelper } from 'src/utils';
+import getRoute from 'src/routes';
 
-function* setListOptions(dataType, actionName, reducerName, moduleName, action = {}, verbose) {
+function* setListOptions(dataType, actionName, reducerName, action = {}, verbose) {
     try {
         const state = yield select();
         const options = action.options || {};
@@ -10,12 +10,12 @@ function* setListOptions(dataType, actionName, reducerName, moduleName, action =
         if (verbose) {
             console.log(
                 'setListOptions reducer name',
-                `state.userAppsReducer.${moduleName}.${reducerName}ListReducer`
+                `state.userAppsReducer.${reducerName}ListReducer`
             );
             console.log('setListOptions action name', `SET_${actionName}_LIST_OPTIONS`);
         }
 
-        const { offset, limit } = state.userAppsReducer[moduleName][`${reducerName}ListReducer`];
+        const { offset, limit } = state[`${reducerName}ListReducer`];
 
         yield put({
             type: `SET_${actionName}_LIST_OPTIONS`,
@@ -32,7 +32,6 @@ function* fetchList(
     dataType,
     actionName,
     reducerName,
-    moduleName,
     action,
     verbose,
     initial = true
@@ -43,11 +42,11 @@ function* fetchList(
         yield put({ type: `FETCH_${actionName}_LIST_REQUEST` });
 
         // if (action.options?.reset) {
-        //     yield call(setListOptions, dataType, actionName, reducerName, moduleName, action, verbose);
+        //     yield call(setListOptions, dataType, actionName, reducerName, action, verbose);
         // }
 
         const state = yield select();
-        const { offset, limit, selectedSortOption } = state.contentReducer[moduleName][`${reducerName}Reducer`];
+        const { page } = state[`${reducerName}Reducer`];
         const additionalQueryParams = action.queryParams ? action.queryParams(state) : {};
         const routeParams = action.routeParams ? action.routeParams(state) : {};
 
@@ -58,11 +57,11 @@ function* fetchList(
                 routeParams
             ),
             {
-                headerParams: { token: state.authReducer.token, contentType: 'application/json' },
+                headerParams: { /* token: state.authReducer.token, */contentType: 'application/json' },
                 queryParams: {
                     // eslint-disable-next-line
-                    off: offset,
-                    lim: limit,
+                    // off: offset,
+                    // lim: limit,
                     // sort: selectedSortOption || action.sortOption || null,
                     // ...fetchHelper.filtersHandler(action.options.filters),
                     ...additionalQueryParams,
@@ -77,10 +76,12 @@ function* fetchList(
             );
             console.log('additionalQueryParams', additionalQueryParams);
             console.log('routeParams', routeParams);
-            console.log('fetchList fetchData', fetchData);
+            console.log('fetchData', fetchData);
         }
 
         const res = yield call(fetch, fetchData.url, fetchData.params);
+        if (!res.ok) throw res;
+
         const response = yield res.json();
 
         if (verbose) {
@@ -94,7 +95,7 @@ function* fetchList(
         //     state,
         //     initial,
         //     function* f() {
-        //         return yield fetchList(dataType, actionName, reducerName, moduleName, action, false);
+        //         return yield fetchList(dataType, actionName, reducerName, action, false);
         //     },
         //     action.options?.forwardErrors
         // );
@@ -102,12 +103,11 @@ function* fetchList(
         //     return false;
         // }
         if (response.status === 'failure') throw response.data;
-        const data = response.data.results;
+        const data = response;
         yield put({
             type: `FETCH_${actionName}_LIST_SUCCESS`,
+            reset: options.reset,
             data,
-            // clear: offset === 0,
-            // total: response.data.total,
         });
         return true;
     } catch (e) {
@@ -126,7 +126,6 @@ const helper = (dataType, sagaOptions, verbose) =>
         const reducerName = sagaOptions?.prefix
             ? `${sagaOptions.prefix}${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`
             : dataType;
-        const moduleName = sagaOptions?.moduleName || `${dataType}ModuleReducer`;
 
         if (verbose) {
             console.log('action name', actionName);
@@ -137,7 +136,7 @@ const helper = (dataType, sagaOptions, verbose) =>
         const requestChan = yield actionChannel(`FETCH_${actionName}_LIST`);
         while (true) {
             const action = yield take(requestChan);
-            yield call(fetchList, dataType, actionName, reducerName, moduleName, action, verbose);
+            yield call(fetchList, dataType, actionName, reducerName, action, verbose);
         }
     };
 

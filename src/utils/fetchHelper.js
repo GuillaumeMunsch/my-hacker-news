@@ -1,5 +1,5 @@
-import * as config from 'MyHackerNews/config.json';
-import getRoute from 'MyHackerNews/src/routes';
+import * as config from 'src/config.json';
+import getRoute from 'src/routes';
 
 const fetchHelper = {
     filtersHandler: actionFilters => {
@@ -37,6 +37,8 @@ const fetchHelper = {
 
     prepareFetchUrl: (route, queryParams = {}) => {
         const fetchUrl = `${config.API_URL}${route.name}`;
+        console.log("fetchUrl", fetchUrl);
+
         let isFirstQueryParam = true;
         const entries = Object.entries(queryParams);
 
@@ -79,23 +81,22 @@ const fetchHelper = {
     },
 
     prepareFetch: (route, params = {}) => {
+        console.log("prepareFetch", route, params);
+
         const url = fetchHelper.prepareFetchUrl(route, params.queryParams);
+        console.log("Url", url);
         const headers = fetchHelper.prepareFetchHeaders(params.headerParams);
+        console.log("headers", headers);
+
         const preparedFetch = { url, params: { method: route.method, headers } };
+        console.log("preparedFetch", preparedFetch);
+
         if (params.body) {
             preparedFetch.params.body = params.body;
         }
         if (params.verbose) console.log('preparedFetch', preparedFetch);
         return preparedFetch;
     },
-
-    categoriesHelper: (state, category) =>
-        fetchHelper.prepareFetch(
-            getRoute('api', 'GET', 'fetchCategories', {
-                category: state.teamReducer.filters[category],
-            }),
-            { headerParams: { token: state.authReducer.token, contentType: 'application/json' } }
-        ),
 };
 
 export default fetchHelper;

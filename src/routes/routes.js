@@ -1,5 +1,5 @@
 const routes = {
-    fetchNews: {
+    fetchNewsList: {
         GET: '/news/{:page}.json',
     },
 };
