@@ -4,36 +4,27 @@
         "browser": true
     },
     "extends": [
-        "airbnb",
         "plugin:prettier/recommended"
     ],
     "plugins": [
         "prettier"
     ],
     "rules": {
+        "no-undef": 1,
         "camelcase": 0,
         "no-console": 0,
         "no-alert": 0,
         "no-unused-expressions": 0,
         "no-plusplus": 0,
-        "react/jsx-filename-extension": [
-            1,
-            {
-                "extensions": [
-                    ".js",
-                    ".jsx"
-                ]
-            }
-        ],
+        "jsx-a11y/anchor-is-valid": 0,
+        "react/jsx-filename-extension": [0],
+        "react/sort-prop-types": [0],
         "react/jsx-pascal-case": 0,
         "react/no-unused-prop-types": 0,
         "react/no-array-index-key": 0,
         "react/no-will-update-set-state": 0,
-        "react/sort-prop-types": [
-            1,
-            {
-                "requiredFirst": true
-            }
-        ]
+        "react/destructuring-assignment": 0,
+        "react/static-property-placement": 0,
+        "react/no-access-state-in-setstate" : 0
     }
 }
