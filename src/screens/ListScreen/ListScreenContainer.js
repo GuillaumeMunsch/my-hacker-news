@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import ListScreenView from './ListScreenView';
 
 const mapStateToProps = state => ({
-  elemList: state.listReducer.elemList,
+  itemList: state.listReducer.itemList,
+  status: state.listReducer.status,
 });
 
 const mapDispatchToProps = dispatch =>

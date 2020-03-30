@@ -3,12 +3,12 @@ import { asyncReducerHelper } from 'src/utils';
 const initialState = {
   status: '',
   error: '',
-  elemList: [],
+  itemList: [],
   page: 1,
 };
 
 const actions = {
-  ...asyncReducerHelper('LIST', { stateName: 'elemList', behavior: 'list' }),
+  ...asyncReducerHelper('LIST', { stateName: 'itemList', behavior: 'list' }),
 };
 
 const listReducer = (state = initialState, action = {}) => {
@@ -18,7 +18,7 @@ const listReducer = (state = initialState, action = {}) => {
       return {
         ...state,
         page: action.page,
-        elemList: action.page !== 1 ? state.elemList : [],
+        itemList: action.page !== 1 ? state.itemList : [],
       };
     default:
       return state;

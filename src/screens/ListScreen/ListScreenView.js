@@ -11,24 +11,31 @@ import {
   List,
   ListItem,
   Right,
+  Spinner,
   Text,
   Title,
 } from 'native-base';
 
 class ListScreenView extends React.Component {
   static propTypes = {
-    elemList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    itemList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    status: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
-    console.log('Props', props);
     props.fetchList(props.route.params.type, true);
   }
 
   renderTeaser = elem => {
     return (
-      <ListItem key={elem.id} thumbnail>
+      <ListItem
+        onPress={() => {
+          this.props.navigation.navigate('Item', { itemID: elem.id });
+        }}
+        key={elem.id}
+        thumbnail
+      >
         <Body>
           <Text>{elem.title}</Text>
           <Text note numberOfLines={1}>
@@ -49,7 +56,12 @@ class ListScreenView extends React.Component {
       <Container>
         <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
         <Content>
-          <List>{this.props.elemList.map(elem => this.renderTeaser(elem))}</List>
+          {this.props.status === 'requesting' && this.props.itemList.length === 0 && (
+            <Spinner color="blue" />
+          )}
+          {this.props.status === 'success' && (
+            <List>{this.props.itemList.map(elem => this.renderTeaser(elem))}</List>
+          )}
         </Content>
       </Container>
     );

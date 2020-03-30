@@ -51,18 +51,16 @@ function* fetchList(action, options) {
     return yield put({ type: `FETCH_LIST_SUCCESS`, data: response });
   } catch (e) {
     console.log('Error', e);
-    if (action.options?.forwardErrors) throw e;
     return yield put({ type: `FETCH_LIST_FAILURE`, error: e });
   }
 }
 
-const listSaga = (options = {}) =>
-  function* watchFetchList() {
-    const requestChan = yield actionChannel(`FETCH_LIST`);
-    while (true) {
-      const action = yield take(requestChan);
-      yield call(fetchList, action, options);
-    }
-  };
+function* watchFetchList(options = {}) {
+  const requestChan = yield actionChannel(`FETCH_LIST`);
+  while (true) {
+    const action = yield take(requestChan);
+    yield call(fetchList, action, options);
+  }
+}
 
-export default listSaga;
+export default watchFetchList;

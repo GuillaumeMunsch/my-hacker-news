@@ -4,7 +4,8 @@ import UserScreenView from './UserScreenView';
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ fetchUser: userName => ({ type: 'FETCH_USER', userName }) }, dispatch);
 
 const UserScreenContainer = connect(mapStateToProps, mapDispatchToProps)(UserScreenView);
 

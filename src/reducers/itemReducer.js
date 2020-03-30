@@ -3,8 +3,7 @@ import { asyncReducerHelper } from 'src/utils';
 const initialState = {
   status: '',
   error: '',
-  item: [],
-  page: 1,
+  item: {},
 };
 
 const actions = {
