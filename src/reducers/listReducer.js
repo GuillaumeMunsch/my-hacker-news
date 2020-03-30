@@ -18,6 +18,12 @@ const actions = {
 const listReducer = (state = initialState, action = {}) => {
   if (actions?.[action.type]) return actions[action.type](state, action);
   switch (action.type) {
+    case 'SET_LIST_OPTIONS':
+      return {
+        ...state,
+        page: action.page,
+        elemList: action.page !== 1 ? state.elemList : [],
+      };
     default:
       return state;
   }

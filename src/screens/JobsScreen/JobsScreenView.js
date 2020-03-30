@@ -22,7 +22,7 @@ class JobsScreenView extends React.Component {
 
   constructor(props) {
     super(props);
-    props.fetchJobs();
+    props.fetchJobs(true);
   }
 
   renderJobsTeaser = job => {
@@ -46,7 +46,7 @@ class JobsScreenView extends React.Component {
   render() {
     return (
       <Container>
-        <MyHeader navigation={this.props.navigation} name={this.props.route.name} />{' '}
+        <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
         <Content>
           <List>{this.props.jobsList.map(job => this.renderJobsTeaser(job))}</List>
         </Content>

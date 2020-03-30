@@ -9,9 +9,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchNews: () => ({
+      fetchNews: (reset = false) => ({
         type: 'FETCH_NEWS_LIST',
         routeParams: state => ({ page: state.listReducer.page }),
+        reset,
       }),
     },
     dispatch

@@ -17,21 +17,21 @@ import {
 
 class NewsScreenView extends React.Component {
   static propTypes = {
-    newsList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    showList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   };
 
   constructor(props) {
     super(props);
-    props.fetchNews();
+    props.fetchShow(true);
   }
 
-  renderNewsTeaser = news => {
+  renderNewsTeaser = show => {
     return (
-      <ListItem key={news.id} thumbnail>
+      <ListItem key={show.id} thumbnail>
         <Body>
-          <Text>{news.title}</Text>
+          <Text>{show.title}</Text>
           <Text note numberOfLines={1}>
-            {`${news.points} points by ${news.user} ${news.time_ago} | ${news.comments_count} comments`}
+            {`${show.points} points by ${show.user} ${show.time_ago} | ${show.comments_count} comments`}
           </Text>
         </Body>
         <Right>
@@ -48,7 +48,7 @@ class NewsScreenView extends React.Component {
       <Container>
         <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
         <Content>
-          <List>{this.props.newsList.map(news => this.renderNewsTeaser(news))}</List>
+          <List>{this.props.showList.map(show => this.renderNewsTeaser(show))}</List>
         </Content>
       </Container>
     );

@@ -22,7 +22,7 @@ class NewestScreenView extends React.Component {
 
   constructor(props) {
     super(props);
-    props.fetchNewest();
+    props.fetchNewest(true);
   }
 
   renderNewestTeaser = newest => {

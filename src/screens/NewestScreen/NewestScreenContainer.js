@@ -9,9 +9,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchNewest: () => ({
+      fetchNewest: (reset = false) => ({
         type: 'FETCH_NEWEST_LIST',
         routeParams: state => ({ page: state.listReducer.page }),
+        reset,
       }),
     },
     dispatch

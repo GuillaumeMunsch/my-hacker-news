@@ -22,7 +22,7 @@ class AskScreenView extends React.Component {
 
   constructor(props) {
     super(props);
-    props.fetchAsk();
+    props.fetchAsk(true);
   }
 
   renderAskTeaser = ask => {

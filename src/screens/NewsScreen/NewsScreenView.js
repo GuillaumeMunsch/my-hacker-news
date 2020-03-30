@@ -22,7 +22,7 @@ class NewsScreenView extends React.Component {
 
   constructor(props) {
     super(props);
-    props.fetchNews();
+    props.fetchNews(true);
   }
 
   renderNewsTeaser = news => {

@@ -10,8 +10,7 @@ function* setListOptions(dataType, actionName, action = {}, verbose) {
     const { page } = state.listReducer;
 
     yield put({
-      type: `SET_${actionName}_LIST_OPTIONS`,
-      ...options,
+      type: `SET_LIST_OPTIONS`,
       page: options.reset ? 1 : page + 1,
     });
   } catch (e) {
@@ -85,7 +84,7 @@ const helper = (dataType, sagaOptions) =>
       const action = yield take(requestChan);
       if (action.reset)
         yield put({
-          type: `SET_${actionName}_LIST_OPTIONS`,
+          type: 'SET_LIST_OPTIONS',
           page: 1,
         });
 
