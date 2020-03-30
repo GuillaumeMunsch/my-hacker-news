@@ -4,7 +4,14 @@ import { View, Text } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NewsScreen, NewestScreen, AskScreen, ShowScreen, JobsScreen } from '../screens';
+import {
+  ListScreen,
+  NewsScreen,
+  NewestScreen,
+  AskScreen,
+  ShowScreen,
+  JobsScreen,
+} from '../screens';
 
 function Feed() {
   return (
@@ -27,12 +34,13 @@ const Drawer = createDrawerNavigator();
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Ask">
-        <Drawer.Screen name="News" component={NewsScreen} />
-        <Drawer.Screen name="Newest" component={NewestScreen} />
-        <Drawer.Screen name="Ask" component={AskScreen} />
-        <Drawer.Screen name="Show" component={ShowScreen} />
-        <Drawer.Screen name="Jobs" component={JobsScreen} />
+      <Drawer.Navigator>
+        <Drawer.Screen name="List" component={ListScreen} initialParams={{ type: 'news' }} />
+        {/* <Drawer.Screen name="News" component={NewsScreen} initialParams={{ type: 'news' }} />
+        <Drawer.Screen name="Newest" component={NewestScreen} initialParams={{ type: 'newest' }} />
+        <Drawer.Screen name="Ask" component={AskScreen} initialParams={{ type: 'ask' }} />
+        <Drawer.Screen name="Show" component={ShowScreen} initialParams={{ type: 'show' }} />
+        <Drawer.Screen name="Jobs" component={JobsScreen} initialParams={{ type: 'jobs' }} /> */}
       </Drawer.Navigator>
     </NavigationContainer>
   );

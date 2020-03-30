@@ -8,11 +8,7 @@ const initialState = {
 };
 
 const actions = {
-  ...asyncReducerHelper('ASK_LIST', { stateName: 'elemList', behavior: 'list' }),
-  ...asyncReducerHelper('JOBS_LIST', { stateName: 'elemList', behavior: 'list' }),
-  ...asyncReducerHelper('NEWEST_LIST', { stateName: 'elemList', behavior: 'list' }),
-  ...asyncReducerHelper('NEWS_LIST', { stateName: 'elemList', behavior: 'list' }),
-  ...asyncReducerHelper('SHOW_LIST', { stateName: 'elemList', behavior: 'list' }),
+  ...asyncReducerHelper('LIST', { stateName: 'elemList', behavior: 'list' }),
 };
 
 const listReducer = (state = initialState, action = {}) => {
