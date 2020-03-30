@@ -3,15 +3,15 @@ import { asyncReducerHelper } from 'src/utils';
 const initialState = {
   status: '',
   error: '',
-  newsList: [],
+  item: [],
   page: 1,
 };
 
 const actions = {
-  ...asyncReducerHelper('NEWS_LIST', { stateName: 'newsList', behavior: 'list' }),
+  ...asyncReducerHelper('ITEM', { stateName: 'item', behavior: 'item' }),
 };
 
-const newsReducer = (state = initialState, action = {}) => {
+const itemReducer = (state = initialState, action = {}) => {
   if (actions?.[action.type]) return actions[action.type](state, action);
   switch (action.type) {
     default:
@@ -19,4 +19,4 @@ const newsReducer = (state = initialState, action = {}) => {
   }
 };
 
-export default newsReducer;
+export default itemReducer;

@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MyHeader } from 'src/components';
+import { MyHeader } from '../../components';
 import {
   Body,
   Button,

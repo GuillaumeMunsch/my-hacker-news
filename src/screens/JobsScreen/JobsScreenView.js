@@ -15,23 +15,23 @@ import {
   Title,
 } from 'native-base';
 
-class NewsScreenView extends React.Component {
+class JobsScreenView extends React.Component {
   static propTypes = {
-    newsList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    jobsList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   };
 
   constructor(props) {
     super(props);
-    props.fetchNews();
+    props.fetchJobs();
   }
 
-  renderNewsTeaser = news => {
+  renderJobsTeaser = job => {
     return (
-      <ListItem key={news.id} thumbnail>
+      <ListItem key={job.id} thumbnail>
         <Body>
-          <Text>{news.title}</Text>
+          <Text>{job.title}</Text>
           <Text note numberOfLines={1}>
-            {`${news.points} points by ${news.user} ${news.time_ago} | ${news.comments_count} comments`}
+            {`${job.points} points by ${job.user} ${job.time_ago} | ${job.comments_count} comments`}
           </Text>
         </Body>
         <Right>
@@ -46,17 +46,17 @@ class NewsScreenView extends React.Component {
   render() {
     return (
       <Container>
-        <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
+        <MyHeader navigation={this.props.navigation} name={this.props.route.name} />{' '}
         <Content>
-          <List>{this.props.newsList.map(news => this.renderNewsTeaser(news))}</List>
+          <List>{this.props.jobsList.map(job => this.renderJobsTeaser(job))}</List>
         </Content>
       </Container>
     );
   }
 }
 
-NewsScreenView.navigationOptions = {
+JobsScreenView.navigationOptions = {
   header: null,
 };
 
-export default NewsScreenView;
+export default JobsScreenView;

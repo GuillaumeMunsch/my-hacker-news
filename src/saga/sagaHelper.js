@@ -2,66 +2,41 @@ import { actionChannel, call, take, put, select } from 'redux-saga/effects';
 import { fetchHelper } from 'src/utils';
 import getRoute from 'src/routes';
 
-function* setListOptions(dataType, actionName, reducerName, action = {}, verbose) {
+function* setListOptions(dataType, actionName, action = {}, verbose) {
   try {
     const state = yield select();
     const options = action.options || {};
 
-    if (verbose) {
-      console.log('setListOptions reducer name', `state.userAppsReducer.${reducerName}ListReducer`);
-      console.log('setListOptions action name', `SET_${actionName}_LIST_OPTIONS`);
-    }
-
-    const { offset, limit } = state[`${reducerName}ListReducer`];
+    const { page } = state.listReducer;
 
     yield put({
       type: `SET_${actionName}_LIST_OPTIONS`,
       ...options,
-      offset: options.reset ? 0 : offset + limit,
-      filters: options.filters,
+      page: options.reset ? 1 : page + 1,
     });
   } catch (e) {
     console.log('Error', e);
   }
 }
 
-function* fetchList(dataType, actionName, reducerName, action, verbose, initial = true) {
+function* fetchList(dataType, actionName, routeName, action, verbose, initial = true) {
   try {
     if (verbose) console.log('raw action', action);
 
     yield put({ type: `FETCH_${actionName}_LIST_REQUEST` });
 
     const state = yield select();
-    const { page } = state[`${reducerName}Reducer`];
+    const { page } = state.listReducer;
     const additionalQueryParams = action.queryParams ? action.queryParams(state) : {};
     const routeParams = action.routeParams ? action.routeParams(state) : {};
 
-    const fetchData = fetchHelper.prepareFetch(
-      getRoute(
-        'GET',
-        `fetch${reducerName.charAt(0).toUpperCase() + reducerName.slice(1)}List`,
-        routeParams
-      ),
-      {
-        headerParams: { /* token: state.authReducer.token, */ contentType: 'application/json' },
-        queryParams: {
-          // eslint-disable-next-line
-          // off: offset,
-          // lim: limit,
-          // sort: selectedSortOption || action.sortOption || null,
-          // ...fetchHelper.filtersHandler(action.options.filters),
-          ...additionalQueryParams,
-        },
-      }
-    );
+    const fetchData = fetchHelper.prepareFetch(getRoute('GET', `fetch${routeName}`, routeParams), {
+      headerParams: { /* token: state.authReducer.token, */ contentType: 'application/json' },
+    });
+    console.log('fetchData', fetchData);
 
     if (verbose) {
-      console.log(
-        'routeName',
-        `fetch${reducerName.charAt(0).toUpperCase() + reducerName.slice(1)}List`
-      );
-      console.log('additionalQueryParams', additionalQueryParams);
-      console.log('routeParams', routeParams);
+      console.log('routeName', `fetch${routeName}`);
       console.log('fetchData', fetchData);
     }
 
@@ -74,20 +49,6 @@ function* fetchList(dataType, actionName, reducerName, action, verbose, initial 
       console.log('fetch response', response);
     }
 
-    // if (action.options?.forwardErrors && response.status === 'failure') throw response.data;
-
-    // const refreshResult = yield refreshTokenHelper(
-    //     response,
-    //     state,
-    //     initial,
-    //     function* f() {
-    //         return yield fetchList(dataType, actionName, reducerName, action, false);
-    //     },
-    //     action.options?.forwardErrors
-    // );
-    // if (refreshResult === false) {
-    //     return false;
-    // }
     if (response.status === 'failure') throw response.data;
     console.log(`FETCH_${actionName}_LIST_SUCCESS`);
     yield put({
@@ -104,25 +65,31 @@ function* fetchList(dataType, actionName, reducerName, action, verbose, initial 
   }
 }
 
-const helper = (dataType, sagaOptions, verbose) =>
+const helper = (dataType, sagaOptions) =>
   function* watchFetchList() {
     const actionName = sagaOptions?.prefix
       ? `${sagaOptions.prefix.toUpperCase()}_${dataType.toUpperCase()}`
       : dataType.toUpperCase();
-    const reducerName = sagaOptions?.prefix
-      ? `${sagaOptions.prefix}${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`
-      : dataType;
+    const routeName = sagaOptions?.prefix
+      ? `${sagaOptions.prefix}${dataType.toUpperCase().charAt(0) + dataType.slice(1)}`
+      : dataType.toUpperCase().charAt(0) + dataType.slice(1);
 
-    if (verbose) {
-      console.log('action name', actionName);
-      console.log('reducer name', reducerName);
+    if (sagaOptions.verbose) {
+      console.log('Action name', actionName);
+      console.log('Route name', routeName);
       console.log('request channel', `FETCH_${actionName}_LIST`);
     }
 
     const requestChan = yield actionChannel(`FETCH_${actionName}_LIST`);
     while (true) {
       const action = yield take(requestChan);
-      yield call(fetchList, dataType, actionName, reducerName, action, verbose);
+      if (action.reset)
+        yield put({
+          type: `SET_${actionName}_LIST_OPTIONS`,
+          page: 1,
+        });
+
+      yield call(fetchList, dataType, actionName, routeName, action, sagaOptions.verbose);
     }
   };
 

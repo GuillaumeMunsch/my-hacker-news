@@ -15,23 +15,23 @@ import {
   Title,
 } from 'native-base';
 
-class NewsScreenView extends React.Component {
+class NewestScreenView extends React.Component {
   static propTypes = {
-    newsList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+    newestList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   };
 
   constructor(props) {
     super(props);
-    props.fetchNews();
+    props.fetchNewest();
   }
 
-  renderNewsTeaser = news => {
+  renderNewestTeaser = newest => {
     return (
-      <ListItem key={news.id} thumbnail>
+      <ListItem key={newest.id} thumbnail>
         <Body>
-          <Text>{news.title}</Text>
+          <Text>{newest.title}</Text>
           <Text note numberOfLines={1}>
-            {`${news.points} points by ${news.user} ${news.time_ago} | ${news.comments_count} comments`}
+            {`${newest.points} points by ${newest.user} ${newest.time_ago} | ${newest.comments_count} comments`}
           </Text>
         </Body>
         <Right>
@@ -48,15 +48,15 @@ class NewsScreenView extends React.Component {
       <Container>
         <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
         <Content>
-          <List>{this.props.newsList.map(news => this.renderNewsTeaser(news))}</List>
+          <List>{this.props.newestList.map(newest => this.renderNewestTeaser(newest))}</List>
         </Content>
       </Container>
     );
   }
 }
 
-NewsScreenView.navigationOptions = {
+NewestScreenView.navigationOptions = {
   header: null,
 };
 
-export default NewsScreenView;
+export default NewestScreenView;

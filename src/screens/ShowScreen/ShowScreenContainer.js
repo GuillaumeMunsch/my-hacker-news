@@ -1,22 +1,22 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import NewsScreenView from './NewsScreenView';
+import ShowScreenView from './ShowScreenView';
 
 const mapStateToProps = state => ({
-  newsList: state.listReducer.elemList,
+  showList: state.listReducer.elemList,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchNews: () => ({
-        type: 'FETCH_NEWS_LIST',
+      fetchShow: () => ({
+        type: 'FETCH_SHOW_LIST',
         routeParams: state => ({ page: state.listReducer.page }),
       }),
     },
     dispatch
   );
 
-const NewsScreenContainer = connect(mapStateToProps, mapDispatchToProps)(NewsScreenView);
+const ShowScreenContainer = connect(mapStateToProps, mapDispatchToProps)(ShowScreenView);
 
-export default NewsScreenContainer;
+export default ShowScreenContainer;
