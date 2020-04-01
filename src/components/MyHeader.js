@@ -1,31 +1,27 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Body, Button, Icon, Left, Header, Right, Title } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 class MyHeader extends PureComponent {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    navigation: PropTypes.shape({
-      openDrawer: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+  static propTypes = {};
 
   render() {
     return (
       <Header>
         <Left>
           {this.props.back ? (
-            <Button onPress={this.props.navigation.goBack} transparent>
+            <Button onPress={Actions.pop} transparent>
               <Icon name="ios-arrow-back" type="Ionicons" style={{ color: '#333333' }} />
             </Button>
           ) : (
-            <Button onPress={this.props.navigation.openDrawer} transparent>
+            <Button onPress={Actions.drawerOpen} transparent>
               <Icon name="menu" type="Entypo" style={{ color: '#333333' }} />
             </Button>
           )}
         </Left>
         <Body>
-          <Title>{this.props.name}</Title>
+          <Title>{Actions.currentParams.title}</Title>
         </Body>
         <Right />
       </Header>

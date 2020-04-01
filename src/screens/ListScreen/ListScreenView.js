@@ -22,16 +22,21 @@ class ListScreenView extends React.Component {
     status: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    props.fetchList(props.route.params.type, true);
+  componentWillMount() {
+    console.log('Props', this.props);
+    this.props.fetchList(this.props.dataType, true);
+  }
+
+  UNSAFE_componentWillUpdate(nextProps) {
+    console.log('Bordel', nextProps);
+    if (this.props.dataType !== nextProps.dataType) nextProps.fetchList(nextProps.dataType, true);
   }
 
   renderTeaser = elem => {
     return (
       <ListItem
         onPress={() => {
-          this.props.navigation.navigate('Item', { itemID: elem.id });
+          //   this.props.navigation.navigate('Item', { itemID: elem.id });
         }}
         key={elem.id}
         thumbnail
@@ -52,9 +57,10 @@ class ListScreenView extends React.Component {
   };
 
   render() {
+    console.log('Props', this.props);
     return (
       <Container>
-        <MyHeader navigation={this.props.navigation} name={this.props.route.name} />
+        <MyHeader />
         <Content>
           {this.props.status === 'requesting' && this.props.itemList.length === 0 && (
             <Spinner color="blue" />

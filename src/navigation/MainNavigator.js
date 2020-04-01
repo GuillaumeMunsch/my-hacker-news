@@ -1,46 +1,29 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { View, Text } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { ListScreen, ItemScreen, UserScreen } from '../screens';
+import { Drawer, Router, Stack, Scene } from 'react-native-router-flux';
+import { DrawerScreen, ListScreen, ItemScreen, UserScreen } from '../screens';
 
-const Stack = createStackNavigator();
+const News = () => <ListScreen dataType="news" />;
+const Newest = () => <ListScreen dataType="newest" />;
+const Ask = () => <ListScreen dataType="ask" />;
+const Jobs = () => <ListScreen dataType="jobs" />;
+const Show = () => <ListScreen dataType="show" />;
 
-const Type = type => (
-  <Stack.Navigator headerMode="none">
-    <Stack.Screen
-      name={type.toUpperCase().charAt(0) + type.slice(1)}
-      component={ListScreen}
-      initialParams={{ type }}
-    />
-    <Stack.Screen name="Item" component={ItemScreen} />
-    <Stack.Screen name="User" component={UserScreen} />
-  </Stack.Navigator>
+const MainNavigator = () => (
+  <Router>
+    <Stack key="root" hideNavBar>
+      <Drawer hideNavBar contentComponent={DrawerScreen} hideNavBar>
+        <Scene hideNavBar key="news" component={News} title="News" />
+        <Scene hideNavBar key="newest" component={Newest} title="Newest" />
+        <Scene hideNavBar key="ask" component={Ask} title="Ask" />
+        <Scene hideNavBar key="jobs" component={Jobs} title="Jobs" />
+        <Scene hideNavBar key="show" component={Show} title="Show" />
+        <Scene hideNavBar key="item" component={ItemScreen} title="Post" />
+        <Scene hideNavBar key="user" component={UserScreen} title="User" />
+      </Drawer>
+    </Stack>
+  </Router>
 );
-
-const News = () => Type('news');
-const Newest = () => Type('newest');
-const Ask = () => Type('ask');
-const Jobs = () => Type('jobs');
-const Show = () => Type('show');
-
-const Drawer = createDrawerNavigator();
-
-// console.log('TYOE', Type('news'));
-const MainNavigator = () => {
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="News" component={News} />
-        <Drawer.Screen name="Newest" component={Newest} />
-        <Drawer.Screen name="Ask" component={Ask} />
-        <Drawer.Screen name="Jobs" component={Jobs} />
-        <Drawer.Screen name="Show" component={Show} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  );
-};
 
 export default MainNavigator;
