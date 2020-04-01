@@ -12,6 +12,8 @@ import {
   ListItem,
   Right,
   Spinner,
+  Card,
+  CardItem,
   Text,
   Title,
 } from 'native-base';
@@ -32,9 +34,17 @@ class ItemScreenView extends React.Component {
     return (
       <Container>
         <MyHeader navigation={this.props.navigation} name={this.props.route.name} back />
-        <Content>
+        <Content padder>
           {this.props.status === 'requesting' && <Spinner color="blue" />}
-          {this.props.status === 'success' && <Text>Item</Text>}
+          {this.props.status === 'success' && (
+            <Card>
+              <CardItem>
+                <Body>
+                  <Text>//Your text here</Text>
+                </Body>
+              </CardItem>
+            </Card>
+          )}
         </Content>
       </Container>
     );

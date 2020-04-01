@@ -16,12 +16,7 @@ class MyHeader extends PureComponent {
         <Left>
           {this.props.back ? (
             <Button onPress={this.props.navigation.goBack} transparent>
-              <Icon
-                name="ios-arrow-back"
-                type="Ionicons
-"
-                style={{ color: '#333333' }}
-              />
+              <Icon name="ios-arrow-back" type="Ionicons" style={{ color: '#333333' }} />
             </Button>
           ) : (
             <Button onPress={this.props.navigation.openDrawer} transparent>
