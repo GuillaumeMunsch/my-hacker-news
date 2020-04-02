@@ -25,15 +25,11 @@ function* fetchList(action, options) {
       });
     yield put({ type: `FETCH_LIST_REQUEST` });
     const state = yield select();
-    const { page } = state.listReducer;
+    const { page, dataType } = state.listReducer;
     const fetchData = fetchHelper.prepareFetch(
-      getRoute(
-        'GET',
-        `fetch${action.listType.toUpperCase().charAt(0) + action.listType.slice(1)}`,
-        {
-          page,
-        }
-      ),
+      getRoute('GET', `fetch${dataType.toUpperCase().charAt(0) + dataType.slice(1)}`, {
+        page,
+      }),
       {
         headerParams: { contentType: 'application/json' },
       }
@@ -46,7 +42,6 @@ function* fetchList(action, options) {
     if (options.verbose) console.log('fetch response', response);
 
     if (response.status === 'failure') throw response.data;
-    console.log(`FETCH_LIST_SUCCESS`);
     yield setListOptions(action, options);
     return yield put({ type: `FETCH_LIST_SUCCESS`, data: response });
   } catch (e) {

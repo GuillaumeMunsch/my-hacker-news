@@ -33,7 +33,7 @@ function* watchFetchItem() {
   const requestChan = yield actionChannel(`FETCH_ITEM`);
   while (true) {
     const action = yield take(requestChan);
-    yield call(fetchItem, action, { verbose: true });
+    yield call(fetchItem, action, { verbose: false });
   }
 }
 

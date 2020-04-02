@@ -16,7 +16,9 @@ import {
 import { Actions } from 'react-native-router-flux';
 
 class DrawerScreenView extends PureComponent {
-  static propTypes = {};
+  static propTypes = {
+    setListOptions: PropTypes.func.isRequired,
+  };
 
   render() {
     return (
@@ -26,7 +28,7 @@ class DrawerScreenView extends PureComponent {
           <ListItem
             onPress={() => {
               this.props.navigation.closeDrawer();
-              Actions.news({ refresh: true });
+              this.props.setListOptions('news');
             }}
           >
             <Text>News</Text>
@@ -34,7 +36,7 @@ class DrawerScreenView extends PureComponent {
           <ListItem
             onPress={() => {
               this.props.navigation.closeDrawer();
-              Actions.newest({ refresh: true });
+              this.props.setListOptions('newest');
             }}
           >
             <Text>Newest</Text>
@@ -42,7 +44,7 @@ class DrawerScreenView extends PureComponent {
           <ListItem
             onPress={() => {
               this.props.navigation.closeDrawer();
-              Actions.ask({ refresh: true });
+              this.props.setListOptions('ask');
             }}
           >
             <Text>Ask</Text>
@@ -50,7 +52,7 @@ class DrawerScreenView extends PureComponent {
           <ListItem
             onPress={() => {
               this.props.navigation.closeDrawer();
-              Actions.jobs({ refresh: true });
+              this.props.setListOptions('jobs');
             }}
           >
             <Text>Jobs</Text>
@@ -58,7 +60,7 @@ class DrawerScreenView extends PureComponent {
           <ListItem
             onPress={() => {
               this.props.navigation.closeDrawer();
-              Actions.show({ refresh: true });
+              this.props.setListOptions('show');
             }}
           >
             <Text>Show</Text>

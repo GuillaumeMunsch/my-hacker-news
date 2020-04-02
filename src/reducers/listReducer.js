@@ -4,6 +4,7 @@ const initialState = {
   status: '',
   error: '',
   itemList: [],
+  dataType: 'news',
   page: 1,
 };
 
@@ -17,8 +18,9 @@ const listReducer = (state = initialState, action = {}) => {
     case 'SET_LIST_OPTIONS':
       return {
         ...state,
-        page: action.page,
+        page: action.page || (action.dataType ? 1 : state.page),
         itemList: action.page !== 1 ? state.itemList : [],
+        dataType: action.dataType || state.dataType,
       };
     default:
       return state;

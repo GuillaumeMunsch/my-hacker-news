@@ -4,7 +4,16 @@ import DrawerScreenView from './DrawerScreenView';
 
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      setListOptions: dataType => ({
+        type: 'SET_LIST_OPTIONS',
+        dataType,
+      }),
+    },
+    dispatch
+  );
 
 const DrawerScreenContainer = connect(mapStateToProps, mapDispatchToProps)(DrawerScreenView);
 

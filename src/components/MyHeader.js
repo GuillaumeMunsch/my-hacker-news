@@ -4,7 +4,9 @@ import { Body, Button, Icon, Left, Header, Right, Title } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
 class MyHeader extends PureComponent {
-  static propTypes = {};
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+  };
 
   render() {
     return (
@@ -21,7 +23,7 @@ class MyHeader extends PureComponent {
           )}
         </Left>
         <Body>
-          <Title>{Actions.currentParams.title}</Title>
+          <Title>{this.props.name}</Title>
         </Body>
         <Right />
       </Header>

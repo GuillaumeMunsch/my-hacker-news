@@ -5,14 +5,14 @@ import ListScreenView from './ListScreenView';
 const mapStateToProps = state => ({
   itemList: state.listReducer.itemList,
   status: state.listReducer.status,
+  dataType: state.listReducer.dataType,
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchList: (listType, reset = false) => ({
+      fetchList: (reset = false) => ({
         type: 'FETCH_LIST',
-        listType,
         reset,
       }),
     },

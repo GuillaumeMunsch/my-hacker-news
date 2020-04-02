@@ -15,6 +15,7 @@ import {
   Text,
   Title,
 } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 class ListScreenView extends React.Component {
   static propTypes = {
@@ -23,24 +24,16 @@ class ListScreenView extends React.Component {
   };
 
   componentWillMount() {
-    console.log('Props', this.props);
     this.props.fetchList(this.props.dataType, true);
   }
 
   UNSAFE_componentWillUpdate(nextProps) {
-    console.log('Bordel', nextProps);
     if (this.props.dataType !== nextProps.dataType) nextProps.fetchList(nextProps.dataType, true);
   }
 
   renderTeaser = elem => {
     return (
-      <ListItem
-        onPress={() => {
-          //   this.props.navigation.navigate('Item', { itemID: elem.id });
-        }}
-        key={elem.id}
-        thumbnail
-      >
+      <ListItem onPress={() => Actions.contentItem({ itemID: elem.id })} key={elem.id} thumbnail>
         <Body>
           <Text>{elem.title}</Text>
           <Text note numberOfLines={1}>
@@ -57,10 +50,11 @@ class ListScreenView extends React.Component {
   };
 
   render() {
-    console.log('Props', this.props);
     return (
       <Container>
-        <MyHeader />
+        <MyHeader
+          name={this.props.dataType.toUpperCase().charAt(0) + this.props.dataType.slice(1)}
+        />
         <Content>
           {this.props.status === 'requesting' && this.props.itemList.length === 0 && (
             <Spinner color="blue" />
