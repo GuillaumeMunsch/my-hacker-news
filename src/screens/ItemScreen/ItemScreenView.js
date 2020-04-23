@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dimensions, Linking, StyleSheet } from 'react-native';
+import { Dimensions, Linking, StyleSheet, TouchableOpacity } from 'react-native';
 import HTML from 'react-native-render-html';
 import { MyHeader } from 'src/components';
 import {
@@ -9,7 +9,6 @@ import {
   Button,
   Container,
   Content,
-  Icon,
   List,
   ListItem,
   Right,
@@ -21,7 +20,6 @@ import {
   View,
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
-import HTMLView from 'react-native-htmlview';
 
 class ItemScreenView extends React.Component {
   static propTypes = {
@@ -33,57 +31,58 @@ class ItemScreenView extends React.Component {
   constructor(props) {
     super(props);
     this.gapWidth = 8;
+    this.commentsReduce = (acc, curr) => {
+      return [
+        ...acc,
+        ...[
+          curr,
+          ...(curr.comments
+            ? curr.comments
+                .map(c => ({ ...c, level: curr.level ? curr.level + 1 : 1 }))
+                .reduce(this.commentsReduce, [])
+            : []),
+        ],
+      ];
+    };
   }
 
   componentWillMount() {
     this.props.fetchItem(this.props.itemID);
   }
 
-  getRandomColor = () => {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
   renderComment = (comment, level = 0) => {
     return (
-      <View style={{ flexDirection: 'row' }} key={comment.id}>
-        {level > 0 && (
+      <View style={{ marginVertical: 4 }} key={comment.id}>
+        <TouchableOpacity onPress={() => Actions.user({ userName: comment.user })}>
+          <Text>
+            <Text style={{ textDecorationLine: 'underline' }}>{comment.user}</Text>
+            {` ${comment.time_ago}`}
+          </Text>
+        </TouchableOpacity>
+        <View>
           <View
             style={{
-              width: this.gapWidth,
-              flexDirection: 'row',
+              marginRight: 4,
+              marginLeft: 4 + 10 * comment.level,
+              borderLeftColor: '#999999',
+              borderLeftWidth: 1,
+              paddingLeft: 4,
             }}
           >
-            <View style={{ flex: 2 }} />
-            <View style={{ flex: 1, backgroundColor: 'grey', width: 2 }} />
-            <View style={{ flex: 5 }} />
+            <HTML html={comment.content} imagesMaxWidth={Dimensions.get('window').width} />
           </View>
-        )}
-        <View>
-          <View>
-            <Text>{`${comment.user} ${comment.time_ago}`}</Text>
-          </View>
-          <HTMLView value={comment.content} />
-
-          {/* <HTML
-            containerStyle={{
-              padding: 8,
-              width: Dimensions.get('window').width - 16 - level * this.gapWidth,
-            }}
-            html={comment.content}
-          /> */}
-          {/* <View
+          <View
             style={{
-              width: Dimensions.get('window').width - 16 - level * this.gapWidth - 32,
-              backgroundColor: 'grey',
-              height: StyleSheet.hairlineWidth,
+              flex: 1,
+              height: 1,
+              flexDirection: 'row',
+              marginVertical: 4,
             }}
-          /> */}
-          <List>{comment.comments.map(c => this.renderComment(c, level + 1))}</List>
+          >
+            <View style={{ height: 1, flex: 1 }} />
+            <View style={{ backgroundColor: '#B5B5B5', height: 1, flex: 1 }} />
+            <View style={{ height: 1, flex: 1 }} />
+          </View>
         </View>
       </View>
     );
@@ -91,7 +90,7 @@ class ItemScreenView extends React.Component {
 
   render() {
     const { item } = this.props;
-    console.log('Props item', this.props);
+    const comments = item.comments?.reduce(this.commentsReduce, []);
     return (
       <Container>
         <MyHeader name="Item" back />
@@ -113,8 +112,7 @@ class ItemScreenView extends React.Component {
                 {item.content.length > 0 && (
                   <CardItem>
                     <Body>
-                      <HTMLView value={item.content} />
-                      {/* <HTML html={item.content} imagesMaxWidth={Dimensions.get('window').width} /> */}
+                      <HTML html={item.content} imagesMaxWidth={Dimensions.get('window').width} />
                     </Body>
                   </CardItem>
                 )}
@@ -122,14 +120,16 @@ class ItemScreenView extends React.Component {
                   bordered
                   footer
                   button
-                  onPress={() => Actions.contentItem({ user: item.user })}
+                  onPress={() => Actions.user({ userName: item.user })}
                 >
-                  <Text
-                    style={{ color: 'black' }}
-                  >{`${item.points} points by ${item.user} ${item.time_ago} | ${item.comments_count} comments`}</Text>
+                  <Text style={{ color: 'black' }}>
+                    {`${item.points} points by `}
+                    <Text style={{ textDecorationLine: 'underline' }}>{item.user}</Text>
+                    {`${item.time_ago} | ${item.comments_count} comments`}
+                  </Text>
                 </CardItem>
                 <CardItem>
-                  <List>{item.comments.map(comment => this.renderComment(comment))}</List>
+                  <List>{comments.map(comment => this.renderComment(comment))}</List>
                 </CardItem>
               </Card>
             </>

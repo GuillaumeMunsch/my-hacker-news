@@ -21,7 +21,6 @@ function* fetchItem(action, options) {
     if (options.verbose) console.log('fetch response', response);
 
     if (response.status === 'failure') throw response.data;
-    console.log(`FETCH_ITEM_SUCCESS`);
     return yield put({ type: `FETCH_ITEM_SUCCESS`, data: response });
   } catch (e) {
     console.log('Error', e);
