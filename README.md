@@ -19,4 +19,4 @@ To launch this hacker news reader you'll have to follow these steps:
 
 ### Demo
 
-![Demo](https://raw.githubusercontent.com/GuillaumeMunsch/my-hacker-news/tree/master/assets/demo.gif)
+![Demo](https://github.com/GuillaumeMunsch/my-hacker-news/blob/master/assets/demo.gif?raw=true)
